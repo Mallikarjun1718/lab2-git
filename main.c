@@ -1,3 +1,4 @@
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -10,9 +11,9 @@ int main (void){
     GPIO_PORTF_DEN_R  = 0x1F;            // SET PORTF PINS 4 PIN
     GPIO_PORTF_DIR_R  = 0x0E;            // SET PORTF4 PIN AS INPUT USER SWITCH PIN
     GPIO_PORTF_PUR_R  = 0x11;            // PORTF4 IS PULLED UP
-    GPIO_PORTF_DATA_R = 0x02;            // LED OFF
+    GPIO_PORTF_DATA_R = 0x00;            // LED OFF
 
-    NVIC_ST_RELOAD_R=0x40FFFF;
+    NVIC_ST_RELOAD_R=0xFFFFFF;
     NVIC_ST_CTRL_R=(1<<2);
     NVIC_ST_CTRL_R|=1;
     while(1){
@@ -22,6 +23,14 @@ int main (void){
             NVIC_ST_CURRENT_R=0;
             NVIC_ST_CTRL_R|=1;
         }
+
+        if((GPIO_PORTF_DATA_R & 0x10)==0x00){
+            GPIO_PORTF_DATA_R|=0x04;
+        }
+        else{
+            GPIO_PORTF_DATA_R&=0x2;
+        }
     }
 }
+
 
